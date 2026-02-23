@@ -1,0 +1,13 @@
+import torch
+
+def dice_score(logits, targets, threshold=0.5, smooth=1e-6):
+    probs = torch.sigmoid(logits)
+    preds = (probs > threshold).float()
+
+    preds = preds.view(-1)
+    targets = targets.view(-1)
+
+    intersection = (preds * targets).sum()
+    dice = (2 * intersection + smooth) / (preds.sum() + targets.sum() + smooth)
+
+    return dice.item()
